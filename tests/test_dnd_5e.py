@@ -1,4 +1,6 @@
-from dnd_5e import __version__, Warrior
+from dnd_5e import __version__, create_character
+from dnd_5e.classes import Clazz, Fighter
+from dnd_5e.races import Race, Human
 
 
 def test_version():
@@ -6,9 +8,8 @@ def test_version():
 
 
 def test_create_character():
-    name = "My Name"
-    character = Warrior(name=name)
-
-    assert character.name == name
-
+    character = create_character(clazz=Clazz.Fighter, race=Race.Human)
+    print(type(character))
+    assert isinstance(character, Clazz.Fighter)
+    assert isinstance(character, Race.Human)
 

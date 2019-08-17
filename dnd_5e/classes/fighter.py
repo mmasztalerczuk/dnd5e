@@ -1,0 +1,2 @@
+class Fighter:
+    pass
