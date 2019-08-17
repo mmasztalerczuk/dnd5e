@@ -5,7 +5,7 @@ from dnd_5e.character import Character
 
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert __version__ == "0.1.0"
 
 
 def test_create_character():
@@ -14,4 +14,3 @@ def test_create_character():
     assert isinstance(character, Fighter)
     assert isinstance(character, Human)
     assert isinstance(character, Character)
-
