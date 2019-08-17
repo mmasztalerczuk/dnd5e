@@ -36,3 +36,17 @@ def test_generate_ability_scores():
     assert new_ability_scores.intelligence == 13
     assert new_ability_scores.wisdom == 15
     assert new_ability_scores.charisma == 16
+
+
+def test_set_ability_scores():
+    random.seed(1234)
+    new_ability_scores = AbilityScores(
+        strength=2, dexterity=3, constitution=4, intelligence=5, wisdom=6, charisma=7
+    )
+
+    assert new_ability_scores.strength == 2
+    assert new_ability_scores.dexterity == 3
+    assert new_ability_scores.constitution == 4
+    assert new_ability_scores.intelligence == 5
+    assert new_ability_scores.wisdom == 6
+    assert new_ability_scores.charisma == 7
