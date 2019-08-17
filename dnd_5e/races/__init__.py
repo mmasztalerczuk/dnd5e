@@ -1,9 +1,5 @@
 from dnd_5e.races.human import Human
-
-
-class Race:
-    Human = Human
-
+from dnd_5e.races.race import Race
 
 __all__ = [
     "Human",
