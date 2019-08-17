@@ -11,11 +11,17 @@ def test_version():
 
 
 def test_create_character():
-    character = create_character(clazz=Fighter, race=Human)
+    name = "my name"
+    character = create_character(clazz=Fighter, race=Human, name=name)
 
     assert isinstance(character, Fighter)
     assert isinstance(character, Human)
     assert isinstance(character, Character)
+    assert character.hit_points_base == 10
+    assert character.hit_points == 10
+    assert character.proficiency_bonus == 2
+    assert character.exp == 0
+    assert character.name == name
 
 
 def test_generate_ability_scores():
@@ -50,3 +56,17 @@ def test_set_ability_scores():
     assert new_ability_scores.intelligence == 5
     assert new_ability_scores.wisdom == 6
     assert new_ability_scores.charisma == 7
+
+
+def test_character():
+    name = "my_name"
+    new_chars = Character(name)
+    assert new_chars.exp == 0
+    assert new_chars.name == name
+
+
+def test_fighter():
+    new_fighter = Fighter()
+    assert new_fighter.hit_points_base == 10
+    assert new_fighter.hit_points == 10
+    assert new_fighter.proficiency_bonus == 2
