@@ -18,9 +18,21 @@ def test_create_character():
     assert isinstance(character, Character)
 
 
-def test_ability_scores():
+def test_generate_ability_scores():
     random.seed(1234)
     new_ability_scores = AbilityScores()
-    x = new_ability_scores.generate_value()
+    x = new_ability_scores.generate_ability_value()
 
     assert x == 10
+
+
+def test_generate_ability_scores():
+    random.seed(1234)
+    new_ability_scores = AbilityScores()
+
+    assert new_ability_scores.strength == 10
+    assert new_ability_scores.dexterity == 15
+    assert new_ability_scores.constitution == 14
+    assert new_ability_scores.intelligence == 13
+    assert new_ability_scores.wisdom == 15
+    assert new_ability_scores.charisma == 16
