@@ -3,6 +3,7 @@ from typing import Union, Type, Any
 
 from dnd_5e.classes import Fighter
 from dnd_5e.weapons.fists import Fists
+from dnd_5e.weapons.shield import Shield
 from dnd_5e.weapons.weapon import Weapon
 from ..races import Race
 from ..classes import Clazz
@@ -28,6 +29,11 @@ def create_character(
             self.second_weapon: Weapon = None
             self.armor = None
 
+            self.actions = 1
+            self.speed = 30
+            self.bonus_action = 1
+            self.reaction = 1
+
             self.set_main_weapon(Fists())
             self.set_second_weapon(Fists())
 
@@ -39,8 +45,16 @@ def create_character(
             if self.current_health > self.max_health:
                 self.current_health = self.max_health
 
+        def get_number_of_actions(self):
+            return 1 + self.additional_actions()
+
         def set_main_weapon(self, weapon):
             self.main_weapon = weapon
+            if self.main_weapon.two_handed:
+                self.second_weapon = weapon
+
+        def reaction(self, situation):
+            return self.do_reaction(situation, second_weapon=self.second_weapon)
 
         def set_second_weapon(self, weapon):
             self.second_weapon = weapon
@@ -53,6 +67,9 @@ def create_character(
                 ac = self.armor.get_ac(dex_mod)
 
             ac += self.get_armor_bonus(self.armor)
+
+            if isinstance(self.second_weapon, Shield):
+                ac += 2
 
             return ac
 
@@ -78,8 +95,12 @@ def create_character(
         def wear_armor(self, armor):
             self.armor = armor
 
-        def damage_roll(self):
+        def damage_roll(self, two_weapon_attack=False):
             bonus_dmg = 0
+            if two_weapon_attack:
+                damage_dices = self.second_weapon.get_damage()
+            else:
+                damage_dices = self.main_weapon.get_damage()
 
             if self.main_weapon.ranged:
                 weapon_modifier = AbilityScores.get_ability_modifier(
@@ -90,9 +111,18 @@ def create_character(
                     self.abilities_score.strength
                 )
 
+            if two_weapon_attack:
+                if not self.two_weapon_attack_disabled():
+                    weapon_modifier = 0
+
             bonus_dmg += self.get_bonus_dmg(self.main_weapon, self.second_weapon)
 
-            return self.main_weapon.get_damage() + weapon_modifier + bonus_dmg
+            self.reroll_dices(self.main_weapon, damage_dices)
+
+            damage_roll = 0
+            for dice in damage_dices:
+                damage_roll += dice.result
+            return damage_roll + weapon_modifier + bonus_dmg
 
         @property
         def max_health(self) -> int:
