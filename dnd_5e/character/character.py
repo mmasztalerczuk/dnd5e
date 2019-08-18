@@ -25,6 +25,8 @@ def create_character(
 
             self.current_health: int = self.max_health
             self.main_weapon: Weapon = None
+            self.armor = None
+
             self.set_main_weapon(Fists())
 
             if fighting_style:
@@ -37,6 +39,15 @@ def create_character(
 
         def set_main_weapon(self, weapon):
             self.main_weapon = weapon
+
+        def get_armor_class(self):
+            dex_mod = AbilityScores.get_ability_modifier(self.abilities_score.dexterity)
+            if self.armor is None:
+                ac = 10 + dex_mod
+            else:
+                ac = self.armor.get_ac(dex_mod)
+
+            return ac
 
         def attack_roll(self):
             attack_roll_bonus = 0
@@ -56,6 +67,9 @@ def create_character(
                 + attack_roll_bonus
                 + self.attack_roll_bonus(weapon=self.main_weapon)
             )
+
+        def wear_armor(self, armor):
+            self.armor = armor
 
         def damage_roll(self):
             if self.main_weapon.ranged:

@@ -6,6 +6,7 @@ from dnd_5e.races import Human
 from dnd_5e.character import AbilityScores, create_character
 from dnd_5e.weapons.fists import Fists
 from dnd_5e.weapons.longbow import LongBow
+from dnd_5e.weapons.ringmail import RingMail
 
 
 def test_version():
@@ -29,6 +30,7 @@ def test_create_character():
     assert character.name == name
     assert character.speed == 30
     assert character.fighting_styles == [Fighter.FightingStyle.Defense]
+    assert character.get_armor_class() == 12
 
 
 def test_fighter_second_wind():
@@ -157,3 +159,50 @@ def test_fists_as_weapon_with_fighting_style():
 
     assert isinstance(character.main_weapon, Fists)
     assert character.damage_roll() == 1
+
+
+def test_armor_class():
+    name = "my name"
+    new_ability_scores = AbilityScores(dexterity=10)
+
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Archery,
+        abilities_score=new_ability_scores,
+    )
+
+    assert character.get_armor_class() == 10
+
+
+def test_armor_class_fighting_style():
+    name = "my name"
+    new_ability_scores = AbilityScores(dexterity=10)
+
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Defense,
+        abilities_score=new_ability_scores,
+    )
+
+    assert character.get_armor_class() == 10
+
+
+def test_armor_class_fighting_style_with_armor():
+    name = "my name"
+    new_ability_scores = AbilityScores(dexterity=20)
+
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Defense,
+        abilities_score=new_ability_scores,
+    )
+    character.wear_armor(RingMail())
+
+    assert character.get_armor_class() == 14
+
