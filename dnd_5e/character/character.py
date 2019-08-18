@@ -25,9 +25,11 @@ def create_character(
 
             self.current_health: int = self.max_health
             self.main_weapon: Weapon = None
+            self.second_weapon: Weapon = None
             self.armor = None
 
             self.set_main_weapon(Fists())
+            self.set_second_weapon(Fists())
 
             if fighting_style:
                 self.fighting_styles.append(fighting_style)
@@ -40,12 +42,17 @@ def create_character(
         def set_main_weapon(self, weapon):
             self.main_weapon = weapon
 
+        def set_second_weapon(self, weapon):
+            self.second_weapon = weapon
+
         def get_armor_class(self):
             dex_mod = AbilityScores.get_ability_modifier(self.abilities_score.dexterity)
             if self.armor is None:
                 ac = 10 + dex_mod
             else:
                 ac = self.armor.get_ac(dex_mod)
+
+            ac += self.get_armor_bonus(self.armor)
 
             return ac
 
@@ -72,6 +79,8 @@ def create_character(
             self.armor = armor
 
         def damage_roll(self):
+            bonus_dmg = 0
+
             if self.main_weapon.ranged:
                 weapon_modifier = AbilityScores.get_ability_modifier(
                     self.abilities_score.dexterity
@@ -81,7 +90,9 @@ def create_character(
                     self.abilities_score.strength
                 )
 
-            return self.main_weapon.get_damage() + weapon_modifier
+            bonus_dmg += self.get_bonus_dmg(self.main_weapon, self.second_weapon)
+
+            return self.main_weapon.get_damage() + weapon_modifier + bonus_dmg
 
         @property
         def max_health(self) -> int:

@@ -4,6 +4,7 @@ from dnd_5e import __version__
 from dnd_5e.classes import Fighter
 from dnd_5e.races import Human
 from dnd_5e.character import AbilityScores, create_character
+from dnd_5e.weapons.dagger import Dagger
 from dnd_5e.weapons.fists import Fists
 from dnd_5e.weapons.longbow import LongBow
 from dnd_5e.weapons.ringmail import RingMail
@@ -169,7 +170,6 @@ def test_armor_class():
         clazz=Fighter,
         race=Human,
         name=name,
-        fighting_style=Fighter.FightingStyle.Archery,
         abilities_score=new_ability_scores,
     )
 
@@ -191,6 +191,21 @@ def test_armor_class_fighting_style():
     assert character.get_armor_class() == 10
 
 
+def test_armor_class_with_armor():
+    name = "my name"
+    new_ability_scores = AbilityScores(dexterity=20)
+
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        abilities_score=new_ability_scores,
+    )
+    character.wear_armor(RingMail())
+
+    assert character.get_armor_class() == 14
+
+
 def test_armor_class_fighting_style_with_armor():
     name = "my name"
     new_ability_scores = AbilityScores(dexterity=20)
@@ -204,5 +219,65 @@ def test_armor_class_fighting_style_with_armor():
     )
     character.wear_armor(RingMail())
 
-    assert character.get_armor_class() == 14
+    assert character.get_armor_class() == 15
+
+
+def test_set_dagger_as_weapon():
+    random.seed(1233)
+    new_ability_scores = AbilityScores(dexterity=10)
+    name = "my name"
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        abilities_score=new_ability_scores,
+    )
+    dagger = Dagger()
+    character.set_main_weapon(dagger)
+
+    assert character.main_weapon == dagger
+    assert character.attack_roll() == 14
+    assert character.damage_roll() == 4
+
+
+def test_set_dagger_as_weapon():
+    random.seed(1233)
+    new_ability_scores = AbilityScores(dexterity=10)
+    name = "my name"
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Dueling,
+        abilities_score=new_ability_scores,
+    )
+    dagger = Dagger()
+    character.set_main_weapon(dagger)
+
+    assert character.main_weapon == dagger
+    assert character.attack_roll() == 14
+    assert character.damage_roll() == 6
+
+
+def test_set_two_daggers_as_weapon():
+    random.seed(1233)
+    new_ability_scores = AbilityScores(dexterity=10)
+    name = "my name"
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Dueling,
+        abilities_score=new_ability_scores,
+    )
+    dagger = Dagger()
+    character.set_main_weapon(dagger)
+    dagger2 = Dagger()
+    character.set_second_weapon(dagger2)
+
+    assert character.main_weapon == dagger
+    assert character.second_weapon == dagger2
+    assert character.attack_roll() == 14
+    assert character.damage_roll() == 4
+
 
