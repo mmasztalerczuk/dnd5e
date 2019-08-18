@@ -1,9 +1,9 @@
 import random
 
-from dnd_5e import __version__, create_character
+from dnd_5e import __version__
 from dnd_5e.classes import Fighter
 from dnd_5e.races import Human
-from dnd_5e.character import Character, AbilityScores
+from dnd_5e.character import AbilityScores, create_character
 
 
 def test_version():
@@ -16,12 +16,11 @@ def test_create_character():
     name = "my name"
     character = create_character(clazz=Fighter, race=Human, name=name)
 
-    assert isinstance(character, Character)
-    assert character.clazz.hit_dice == 10
-    assert character.clazz.proficiency_bonus == 2
+    assert character.hit_dice == 10
+    assert character.proficiency_bonus == 2
     assert character.exp == 0
     assert character.name == name
-    assert character.race.speed == 30
+    assert character.speed == 30
 
 
 def test_generate_ability_scores():

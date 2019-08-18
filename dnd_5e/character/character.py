@@ -5,17 +5,25 @@ from ..classes import Clazz
 from . import AbilityScores
 
 
-class Character:
-    def __init__(
-        self,
-        name: str,
-        clazz: Clazz,
-        race: Race,
-        abilities_score: Union[AbilityScores, None] = None,
-    ) -> None:
-        self.clazz = clazz
-        self.race = race
+def create_character(
+    clazz: Type[Clazz],
+    race: Type[Race],
+    name: str,
+    abilities: Union[AbilityScores, None] = None,
+) -> 'Character':
 
-        self.name: str = name
-        self.exp: int = 0
-        self.abilities_score: AbilityScores = abilities_score or AbilityScores()
+    class Character(clazz, race):
+        def __init__(
+                self,
+                name: str,
+                abilities_score: Union[AbilityScores, None] = None,
+        ) -> None:
+            super().__init__()
+            self.clazz = clazz
+            self.race = race
+
+            self.name: str = name
+            self.exp: int = 0
+            self.abilities_score: AbilityScores = abilities_score or AbilityScores()
+
+    return Character(name, abilities_score=abilities)
