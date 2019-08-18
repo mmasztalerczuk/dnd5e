@@ -23,6 +23,18 @@ def test_create_character():
     assert character.speed == 30
 
 
+def test_fighter_second_wind():
+    random.seed(1234)
+
+    name = "my name"
+    character = create_character(clazz=Fighter, race=Human, name=name)
+    character.current_health = 5
+
+    character.second_wind()
+
+    assert character.current_health == 8
+
+
 def test_generate_ability_scores():
     random.seed(1234)
     new_ability_scores = AbilityScores()
