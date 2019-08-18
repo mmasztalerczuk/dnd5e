@@ -10,12 +10,12 @@ class Fighter(Clazz, Status):
         self.add_health(randint(1, 10) + self.level)
 
     class FightingStyle(Enum):
-        Archery = 1,
-        Defense = 2,
-        Dueling = 3,
-        GreatWeaponFighting = 4,
-        Protection = 5,
-        TwoWeaponFighting = 6,
+        Archery = (1,)
+        Defense = (2,)
+        Dueling = (3,)
+        GreatWeaponFighting = (4,)
+        Protection = (5,)
+        TwoWeaponFighting = (6,)
 
     def __init__(self) -> None:
         super().__init__()
@@ -23,3 +23,8 @@ class Fighter(Clazz, Status):
         self.hit_dice: int = 10
         self.proficiency_bonus: int = 2
         self.fighting_styles = []
+
+    def attack_roll_bonus(self, weapon):
+        if weapon.ranged and Fighter.FightingStyle.Archery in self.fighting_styles:
+            return 2
+        return 0

@@ -39,18 +39,33 @@ def create_character(
             self.main_weapon = weapon
 
         def attack_roll(self):
-            if self.main_weapon.ranged:
-                weapon_modifier = AbilityScores.get_ability_modifier(self.abilities_score.dexterity)
-            else:
-                weapon_modifier = AbilityScores.get_ability_modifier(self.abilities_score.strength)
+            attack_roll_bonus = 0
 
-            return randint(1, 20) + weapon_modifier
+            if self.main_weapon.ranged:
+                weapon_modifier = AbilityScores.get_ability_modifier(
+                    self.abilities_score.dexterity
+                )
+            else:
+                weapon_modifier = AbilityScores.get_ability_modifier(
+                    self.abilities_score.strength
+                )
+
+            return (
+                randint(1, 20)
+                + weapon_modifier
+                + attack_roll_bonus
+                + self.attack_roll_bonus(weapon=self.main_weapon)
+            )
 
         def damage_roll(self):
             if self.main_weapon.ranged:
-                weapon_modifier = AbilityScores.get_ability_modifier(self.abilities_score.dexterity)
+                weapon_modifier = AbilityScores.get_ability_modifier(
+                    self.abilities_score.dexterity
+                )
             else:
-                weapon_modifier = AbilityScores.get_ability_modifier(self.abilities_score.strength)
+                weapon_modifier = AbilityScores.get_ability_modifier(
+                    self.abilities_score.strength
+                )
 
             return self.main_weapon.get_damage() + weapon_modifier
 

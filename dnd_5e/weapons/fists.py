@@ -6,4 +6,3 @@ class Fists(Weapon):
     def __init__(self) -> None:
         super().__init__()
         self.dices = [Dice(1)]
-

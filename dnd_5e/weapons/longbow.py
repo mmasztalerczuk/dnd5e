@@ -7,4 +7,3 @@ class LongBow(Weapon):
         super().__init__()
         self.dices = [Dice(8)]
         self.ranged = True
-

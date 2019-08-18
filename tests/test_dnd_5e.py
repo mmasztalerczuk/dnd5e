@@ -16,8 +16,12 @@ def test_create_character():
     random.seed(1234)
 
     name = "my name"
-    character = create_character(clazz=Fighter, race=Human, name=name,
-                                 fighting_style=Fighter.FightingStyle.Defense)
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Defense,
+    )
 
     assert character.hit_dice == 10
     assert character.proficiency_bonus == 2
@@ -97,7 +101,9 @@ def test_set_bow_as_weapon():
     random.seed(1233)
     new_ability_scores = AbilityScores(dexterity=10)
     name = "my name"
-    character = create_character(clazz=Fighter, race=Human, name=name, abilities_score=new_ability_scores)
+    character = create_character(
+        clazz=Fighter, race=Human, name=name, abilities_score=new_ability_scores
+    )
     longbow = LongBow()
     character.set_main_weapon(longbow)
 
@@ -106,11 +112,48 @@ def test_set_bow_as_weapon():
     assert character.damage_roll() == 4
 
 
+def test_set_bow_as_weapon_with_fighting_style():
+    random.seed(1233)
+    new_ability_scores = AbilityScores(dexterity=10)
+    name = "my name"
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Archery,
+        abilities_score=new_ability_scores,
+    )
+    longbow = LongBow()
+    character.set_main_weapon(longbow)
+
+    assert character.main_weapon == longbow
+    assert character.attack_roll() == 14
+    assert character.damage_roll() == 4
+
+
 def test_fists_as_weapon():
     name = "my name"
     new_ability_scores = AbilityScores(strength=10)
 
-    character = create_character(clazz=Fighter, race=Human, name=name, abilities_score=new_ability_scores)
+    character = create_character(
+        clazz=Fighter, race=Human, name=name, abilities_score=new_ability_scores
+    )
+
+    assert isinstance(character.main_weapon, Fists)
+    assert character.damage_roll() == 1
+
+
+def test_fists_as_weapon_with_fighting_style():
+    name = "my name"
+    new_ability_scores = AbilityScores(strength=10)
+
+    character = create_character(
+        clazz=Fighter,
+        race=Human,
+        name=name,
+        fighting_style=Fighter.FightingStyle.Archery,
+        abilities_score=new_ability_scores,
+    )
 
     assert isinstance(character.main_weapon, Fists)
     assert character.damage_roll() == 1
