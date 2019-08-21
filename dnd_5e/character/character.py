@@ -45,9 +45,6 @@ def create_character(
             if self.current_health > self.max_health:
                 self.current_health = self.max_health
 
-        def get_number_of_actions(self):
-            return 1 + self.additional_actions()
-
         def set_main_weapon(self, weapon):
             self.main_weapon = weapon
             if self.main_weapon.two_handed:

@@ -30,13 +30,32 @@ class Fighter(Clazz, Status):
         self.proficiency_bonus: int = 2
         self.fighting_styles = []
 
+        self.action_surge_usage = 0
+        self.action_surge_active = True
+
+    def reset_action_surge(self):
+        if 2 <= self.level < 17:
+            self.action_surge_usage = 1
+        elif self.level >= 17:
+            self.action_surge_usage = 2
+        else:
+            self.action_surge_usage = 0
+
+    def do_long_rest(self):
+        self.reset_action_surge()
+
+    def do_short_rest(self):
+        self.reset_action_surge()
+
+    def new_turn(self):
         self.action_surge_active = True
 
     def action_surge(self):
+        self.action_surge_active = False
         self.actions += 1
 
     def additional_actions(self):
-        if self.action_surge_active:
+        if self.action_surge_active and self.action_surge_usage > 0:
             return ["Action Surge"]
 
     def two_weapon_attack_disabled(self):
