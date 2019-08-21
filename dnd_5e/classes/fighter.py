@@ -1,9 +1,6 @@
 from enum import Enum
 from random import randint
 
-from typing import List
-
-from dnd_5e import Dice
 from dnd_5e.classes.clazz import Clazz
 from dnd_5e.situation.situation import Situation
 from dnd_5e.status import Status
